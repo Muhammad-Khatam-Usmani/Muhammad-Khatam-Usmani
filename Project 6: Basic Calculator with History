@@ -1,0 +1,33 @@
+def load_history():
+    try:
+        with open("calc_history.txt", "r") as f:
+            return f.readlines()
+    except:
+        return []
+
+def save_history(history):
+    with open("calc_history.txt", "w") as f:
+        f.writelines(history)
+
+history = load_history()
+
+while True:
+    expr = input("Enter expression (or 'history' / 'exit'): ")
+
+    if expr.lower() == "exit":
+        print("Exiting Calculator.")
+        break
+    elif expr.lower() == "history":
+        print("\n Calculation History:")
+        for line in history:
+            print(line.strip())
+        print()
+    else:
+        try:
+            result = eval(expr)
+            entry = f"{expr} = {result}\n"
+            history.append(entry)
+            save_history(history)
+            print(f"Result: {result}\n")
+        except:
+            print("Invalid expression. Try again.\n")
