@@ -1,0 +1,95 @@
+import os
+import json
+FILENAME = "bank_accounts.json"
+
+def load_accounts():
+    if os.path.exists(FILENAME):
+        with open(FILENAME, "r") as file:
+            return json.load(file)
+    return {}
+
+def save_accounts(accounts):
+    with open(FILENAME, "w") as file:
+        json.dump(accounts, file)
+
+accounts = load_accounts()
+
+def create_account():
+    acc_num = input("Enter account number: ")
+    if acc_num in accounts:
+        print("Account already exists.\n")
+        return
+    name = input("Enter name: ")
+    accounts[acc_num] = {"name": name, "balance": 0, "history": []}
+    save_accounts(accounts)
+    print("Account created.\n")
+
+def deposit():
+    acc_num = input("Enter account number: ")
+    if acc_num in accounts:
+        amount = float(input("Enter amount to deposit: "))
+        accounts[acc_num]["balance"] += amount
+        accounts[acc_num]["history"].append(f"Deposit: +{amount}")
+        save_accounts(accounts)
+        print("Deposit successful.\n")
+    else:
+        print("Account not found")
+
+def withdraw():
+    acc_num = input("Enter account number: ")
+    if acc_num in accounts:
+        amount = float(input("Enter amount to withdraw: "))
+        if accounts[acc_num]["balance"] >= amount:
+            accounts[acc_num]["balance"] -= amount
+            accounts[acc_num]["history"].append(f"Withdraw: -{amount}")
+            save_accounts(accounts)
+            print("Withdrawal successful.\n")
+        else:
+            print("Insufficient balance.\n")
+    else:
+        print("Account not found.\n")
+
+def check_balance():
+    acc_num = input("Enter account number: ")
+    if acc_num in accounts:
+        balance = accounts[acc_num]["balance"]
+        print(f"Current Balance: {balance}\n")
+    else:
+        print("Account not found.\n")
+
+def transaction_history():
+    acc_num = input("Enter account number: ")
+    if acc_num in accounts:
+        print(f"\nTransaction History for {accounts[acc_num]['name']}:")
+        for t in accounts[acc_num]["history"]:
+            print(" -", t)
+        print()
+    else:
+        print("Account not found.\n")
+
+
+while True:
+    print("1. Create account")
+    print("2. Deposit")
+    print("3. Withdraw")
+    print("4. Check Balance")
+    print("5. Transaction History")
+    print("6. Exit")
+
+    choice = input("Choose (1-6): ")
+
+    if choice == "1":
+        create_account()
+    elif choice == "2":
+        deposit()
+    elif choice == "3":
+        withdraw()
+    elif choice == "4":
+        check_balance()
+    elif choice == "5":
+        transaction_history()
+    elif choice == "6":
+        print("Exiting. Thank you!")
+        break
+    else:
+        print("Invalid option.\n")
