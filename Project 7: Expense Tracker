@@ -1,0 +1,66 @@
+def load_expenses():
+    try:
+        with open("expenses.txt", "r") as f:
+            lines = f.readlines()
+            return [line.strip().split(",") for line in lines]
+    except:
+        return []
+
+def save_expenses(expenses):
+    with open("expenses.txt", "w") as f:
+        for e in expenses:
+            f.write(",".join(e) + "\n")
+
+expenses = load_expenses()
+
+def add_expense():
+    date = input("Date (YYYY-MM-DD): ")
+    category = input("Category (Food, Travel, etc): ")
+    amount = input("Amount: ")
+    expenses.append([date, category, amount])
+    save_expenses(expenses)
+    print("Expense Added!\n")
+
+def view_expenses():
+    print("\nAll Expenses:")
+    for e in expenses:
+        print(f"Date: {e[0]}, Category: {e[1]}, Amount: {e[2]}")
+    print()
+
+def total_by_date():
+    date = input("Enter date to calculate total (YYYY-MM-DD): ")
+    total = sum(float(e[2]) for e in expenses if e[0] == date)
+    print(f"Total on {date}: {total}\n")
+
+def category_summary():
+    summary = {}
+    for e in expenses:
+        cat = e[1]
+        amt = float(e[2])
+        summary[cat] = summary.get(cat, 0) + amt
+    print("\nCategory Summary:")
+    for cat, amt in summary.items():
+        print(f"{cat}: {amt}")
+    print()
+
+def search_by_date():
+    date = input("Enter date to search (YYYY-MM-DD): ")
+    print(f"\nExpenses on {date}:")
+    for e in expenses:
+        if e[0] == date:
+            print(f"Category: {e[1]}, Amount: {e[2]}")
+    print()
+
+while True:
+    print("1. Add Expense\n2. View Expenses\n3. Total by Date\n4. Category Summary\n5. Search by Date\n6. Exit")
+    choice = input("Choose option: ")
+    if choice == "1": add_expense()
+    elif choice == "2": view_expenses()
+    elif choice == "3": total_by_date()
+    elif choice == "4": category_summary()
+    elif choice == "5": search_by_date()
+    elif choice == "6":
+        print("Exiting Expense Tracker.")
+        break
+    else:
+        print("Invalid choice.\n")
