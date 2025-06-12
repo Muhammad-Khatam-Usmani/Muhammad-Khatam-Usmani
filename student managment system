@@ -1,0 +1,53 @@
+import json
+import os
+
+filename = "students.json"
+
+if os.path.exists(filename) and os.path.getsize(filename) > 0:
+    with open(filename, "r") as file:
+        students = json.load(file)
+else:
+    students = [
+        {"name": "Hassan", "roll": 100, "class": "10th", "marks": 88},
+        {"name": "Ali", "roll": 200, "class": "9th", "marks": 76},
+        {"name": "Khatam", "roll": 300, "class": "10th", "marks": 92}
+    ]
+
+new_student = {"name": "Amina", "roll": 500, "class": "9th", "marks": 88}
+students.append(new_student)
+print("Student Added:")
+print(f"{new_student['name']} - Roll {new_student['roll']}")
+print("-" * 50)
+
+print("All Students:")
+for stu in students:
+    print(f"Name: {stu['name']}, Roll: {stu['roll']}, Class: {stu['class']}, Marks: {stu['marks']}")
+print("-" * 50)
+
+print("Search Student (Roll 300):")
+for stu in students:
+    if stu['roll'] == 300:
+        print(f"Found: {stu['name']} - Class {stu['class']} - Marks {stu['marks']}")
+print("-" * 50)
+
+print("Updating Student (Roll 200):")
+for stu in students:
+    if stu['roll'] == 200:
+        stu['name'] = "Ali Raza"
+        stu['marks'] = 95
+        print(f"Updated: {stu['name']} - Roll {stu['roll']} - Marks: {stu['marks']}")
+print("-" * 50)
+
+print("Deleting Student (Roll 100):")
+students = [stu for stu in students if stu['roll'] != 100]
+print("Student with Roll 100 deleted.")
+print("-" * 50)
+
+print("Final Student Records:")
+for stu in students:
+    print(f"Name: {stu['name']}, Roll: {stu['roll']}, Class: {stu['class']}, Marks: {stu['marks']}")
+print("-" * 50)
+
+with open(filename, "w") as file:
+    json.dump(students, file, indent=4)
+print("Data saved to students.json")
