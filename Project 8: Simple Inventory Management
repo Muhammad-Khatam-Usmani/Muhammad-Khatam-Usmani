@@ -1,10 +1,8 @@
-# Save inventory to file
 def save(inv):
     with open("inventory.txt", "w") as f:
         for i in inv:
             f.write(f"{i['name']},{i['id']},{i['qty']}\n")
 
-# Load inventory from file
 def load():
     try:
         with open("inventory.txt", "r") as f:
@@ -12,10 +10,8 @@ def load():
     except:
         return []
 
-# Inventory list
 inventory = load()
 
-# Add product
 def add():
     name = input("Name: ")
     pid = input("ID: ")
@@ -24,13 +20,11 @@ def add():
     save(inventory)
     print("Added\n")
 
-# View all
 def view():
     for i in inventory:
         print(f"{i['name']} | ID: {i['id']} | Qty: {i['qty']}")
     print()
 
-# Update quantity
 def update():
     pid = input("ID to update: ")
     for i in inventory:
@@ -41,7 +35,6 @@ def update():
             return
     print("Not found\n")
 
-# Delete product
 def delete():
     pid = input("ID to delete: ")
     global inventory
@@ -49,7 +42,6 @@ def delete():
     save(inventory)
     print("Deleted\n")
 
-# Search product
 def search():
     key = input("Name or ID: ").lower()
     for i in inventory:
