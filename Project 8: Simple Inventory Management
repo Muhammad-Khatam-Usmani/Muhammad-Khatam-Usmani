@@ -1,0 +1,70 @@
+# Save inventory to file
+def save(inv):
+    with open("inventory.txt", "w") as f:
+        for i in inv:
+            f.write(f"{i['name']},{i['id']},{i['qty']}\n")
+
+# Load inventory from file
+def load():
+    try:
+        with open("inventory.txt", "r") as f:
+            return [dict(zip(["name", "id", "qty"], line.strip().split(","))) for line in f]
+    except:
+        return []
+
+# Inventory list
+inventory = load()
+
+# Add product
+def add():
+    name = input("Name: ")
+    pid = input("ID: ")
+    qty = input("Qty: ")
+    inventory.append({"name": name, "id": pid, "qty": qty})
+    save(inventory)
+    print("Added\n")
+
+# View all
+def view():
+    for i in inventory:
+        print(f"{i['name']} | ID: {i['id']} | Qty: {i['qty']}")
+    print()
+
+# Update quantity
+def update():
+    pid = input("ID to update: ")
+    for i in inventory:
+        if i['id'] == pid:
+            i['qty'] = input("New Qty: ")
+            save(inventory)
+            print("Updated\n")
+            return
+    print("Not found\n")
+
+# Delete product
+def delete():
+    pid = input("ID to delete: ")
+    global inventory
+    inventory = [i for i in inventory if i['id'] != pid]
+    save(inventory)
+    print("Deleted\n")
+
+# Search product
+def search():
+    key = input("Name or ID: ").lower()
+    for i in inventory:
+        if key in i['name'].lower() or key == i['id']:
+            print(f"Found: {i['name']} | Qty: {i['qty']}")
+            return
+    print("Not found\n")
+
+while True:
+    print("1.Add 2.View 3.Update 4.Delete 5.Search 6.Exit")
+    c = input("Choose: ")
+    if c == "1": add()
+    elif c == "2": view()
+    elif c == "3": update()
+    elif c == "4": delete()
+    elif c == "5": search()
+    elif c == "6": break
+    else: print("Invalid\n")
