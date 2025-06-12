@@ -1,0 +1,67 @@
+def save(books):
+    with open("books.txt", "w") as f:
+        for b in books:
+            f.write(f"{b['title']},{b['author']},{b['isbn']},{b['status']}\n")
+
+def load():
+    try:
+        with open("books.txt", "r") as f:
+            return [dict(zip(["title", "author", "isbn", "status"], line.strip().split(","))) for line in f]
+    except:
+        return []
+
+books = load()
+
+# Features
+def add():
+    t = input("Title: ")
+    a = input("Author: ")
+    i = input("ISBN: ")
+    books.append({"title": t, "author": a, "isbn": i, "status": "Available"})
+    save(books)
+    print("Book added.\n")
+
+def show():
+    for b in books:
+        print(f"{b['title']} | {b['author']} | {b['isbn']} | {b['status']}")
+
+def issue():
+    i = input("ISBN to issue: ")
+    for b in books:
+        if b['isbn'] == i and b['status'] == "Available":
+            b['status'] = "Issued"
+            save(books)
+            print("Issued.\n")
+            return
+    print("Not available.\n")
+
+def ret():
+    i = input("ISBN to return: ")
+    for b in books:
+        if b['isbn'] == i and b['status'] == "Issued":
+            b['status'] = "Available"
+            save(books)
+            print("Returned.\n")
+            return
+    print("Not found.\n")
+
+def find():
+    k = input("Title or ISBN: ").lower()
+    for b in books:
+        if k in b['title'].lower() or k == b['isbn']:
+            print(f"{b['title']} | {b['author']} | {b['status']}")
+            return
+    print("Not found.\n")
+
+# Menu
+while True:
+    print("\n1.Add  2.Show  3.Issue  4.Return  5.Search  6.Exit")
+    ch = input("Choice: ")
+    if ch == "1": add()
+    elif ch == "2": show()
+    elif ch == "3": issue()
+    elif ch == "4": ret()
+    elif ch == "5": find()
+    elif ch == "6": break
+    else: print("Invalid\n")
+
